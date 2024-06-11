@@ -8,7 +8,60 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum AuthBindingStatus {
+  UNAUTHORIZED
+  AUTHORIZED
+}
+
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model Files {
+  id          Int      @id @default(autoincrement())
+  create_time DateTime @default(now())
+  type        String   @default("") @db.VarChar(50)
+  name        String   @default("") @db.VarChar(50)
+  size        Int
+  md5         String   @default("") @db.VarChar(50)
+
+  @@map("files")
+}
+
+model Ticket {
+  id          Int      @id @default(autoincrement())
+  create_time DateTime @default(now())
+  ticket      String   @db.VarChar(500)
+  type        Int
+  appid       String
+
+  @@map("luck_assistant_tickets")
+}
+
+model Auths {
+  id                       Int               @id @default(autoincrement())
+  appid                    String            @unique @db.VarChar(50)
+  create_time              DateTime          @default(now())
+  update_time              DateTime
+  expires_in               Int
+  authorizer_access_token  String
+  authorizer_refresh_token String
+  account_name             String
+  account_type             Int
+  head_image_url           String
+  AuthBinding              AuthBinding[]
+  status                   AuthBindingStatus @default(AUTHORIZED)
+
+  @@map("luck_assistant_auths")
+}
+
+model AuthBinding {
+  id          Int      @id @default(autoincrement())
+  user_id     String
+  appid       String   @map("appid")
+  account     Auths    @relation(fields: [appid], references: [appid])
+  create_time DateTime @default(now())
+
+  @@map("luck_assistant_binding")
 }
