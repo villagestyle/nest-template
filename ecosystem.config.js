@@ -6,7 +6,7 @@ module.exports = {
       exec_mode: 'cluster',
       // 开启的进程数
       instances: 1, // Or a number of instances
-      script: './build/main.js',
+      script: './build/src/main.js',
       args: 'start',
       env: {
         NODE_ENV: 'development',

@@ -77,3 +77,9 @@ Nest is [MIT licensed](LICENSE).
 dotenv-cli 
 nodejs 16.18+
 pm2
+
+
+```bash
+# 执行build
+$ pm2 start --env prod
+```
